@@ -2,7 +2,7 @@ from config.database import Base
 from sqlalchemy import ForeignKey, Date, Time, Integer, Column, String
 
 
-class Cita(Base):
+class Citas(Base):
 
     __tablename__ = 'citas'
 

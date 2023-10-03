@@ -2,7 +2,7 @@ from config.database import Base
 from sqlalchemy import Date, Float, Integer, ForeignKey, Column
 
 
-class Factura(Base):
+class Facturas(Base):
 
     __tablename__ = 'facturas'
 
