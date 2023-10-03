@@ -2,7 +2,7 @@ from config.database import Base
 from sqlalchemy import Column, Integer, String
 
 
-class Usuario(Base):
+class Usuarios(Base):
     
     __tablename__ = 'usuarios'
 

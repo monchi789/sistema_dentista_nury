@@ -2,7 +2,7 @@ from config.database import Base
 from sqlalchemy import Integer, String, ForeignKey, Column, Date, Time, Float
 
 
-class CitaSinTratamiento(Base):
+class CitasSinTratamiento(Base):
 
     __tablename__ = 'citas_sin_tratamiento'
     

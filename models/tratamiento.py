@@ -2,7 +2,7 @@ from config.database import Base
 from sqlalchemy import Column, Integer, String, ForeignKey, Float
 
 
-class Tratamiento(Base):
+class Tratamientos(Base):
 
     __tablename__ = 'tratamientos'
 
