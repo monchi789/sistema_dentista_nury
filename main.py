@@ -7,10 +7,11 @@ from models.paciente import Base
 from models.pago import Base
 from models.tratamiento import Base
 from config.database import engine
-from routes import usuario
+from routes import usuario, pacientes
 
 app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
 app.include_router(usuario.router)
+app.include_router(pacientes.router)
