@@ -11,7 +11,7 @@ class CitaRequest(BaseModel):
     class Config:
         json_schema_extra = {
             'example': {
-                'fecha': '2020-11- 24',
+                'fecha': '2020-11-24',
                 'hora': '15:35:00',
                 'descripcion': 'Esto fue una  cita ',
                 'id_paciente': 1
