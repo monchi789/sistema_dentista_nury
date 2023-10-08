@@ -10,6 +10,8 @@ router = APIRouter(
 )
 
 
+bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
+
 @router.get('/usuarios', status_code=status.HTTP_200_OK)
 async def get_all_usuarios(db: db_dependency):
     
@@ -27,7 +29,7 @@ async def create_usuario(db: db_dependency, usuario_request: UsuarioRequest):
     
     usuario_model = Usuarios(
         usuario=usuario_request.usuario, telefono=usuario_request.telefono, correo=usuario_request.correo, 
-        nombres=usuario_request.nombres, apellidos=usuario_request.apellidos, contrasena=usuario_request.contrasena,
+        nombres=usuario_request.nombres, apellidos=usuario_request.apellidos, contrasena=bcrypt_context.hash(usuario_request.contrasena),
         rol=usuario_request.rol
     )
 
@@ -48,7 +50,7 @@ async def update_usuario(db: db_dependency, usuario_request: UsuarioRequest, usu
     usuario_model.correo = usuario_request.correo
     usuario_model.nombres = usuario_request.nombres
     usuario_model.apellidos = usuario_request.apellidos
-    usuario_model.contrasena = usuario_request.contrasena
+    usuario_model.contrasena = bcrypt_context.hash(usuario_request.contrasena)
     usuario_model.rol = usuario_request.rol
 
     db.add(usuario_model)
