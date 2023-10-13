@@ -7,7 +7,7 @@ from models.paciente import Base
 from models.pago import Base
 from models.tratamiento import Base
 from config.database import engine
-from routes import usuario, pacientes, cita_sin_tratamiento, cita, tratamiento, factura
+from routes import usuario, pacientes, cita_sin_tratamiento, cita, tratamiento, factura, token
 
 app = FastAPI()
 
@@ -19,3 +19,4 @@ app.include_router(cita_sin_tratamiento.router)
 app.include_router(cita.router)
 app.include_router(tratamiento.router)
 app.include_router(factura.router)
+app.include_router(token.router)
