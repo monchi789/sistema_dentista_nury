@@ -3,6 +3,7 @@ from models.cita import Citas
 from schemas.cita import CitaRequest
 from config.database import db_dependency
 from datetime import datetime
+from routes.token import user_dependecy
 
 
 router = APIRouter(
@@ -17,13 +18,19 @@ async def get_all_citas(db: db_dependency):
 
 
 @router.get('/citas/{citas_id}', status_code=status.HTTP_200_OK)
-async def  get_citas_by_id(db: db_dependency, citas_id: int = Path(gt=0)):
+async def  get_citas_by_id(usuario: user_dependecy, db: db_dependency, citas_id: int = Path(gt=0)):
+
+    if usuario is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Autenticacion Fallida')
 
     return db.query(Citas).filter(Citas.id  == citas_id).first()
 
 
 @router.post('/citas', status_code=status.HTTP_201_CREATED)
-async def create_citas(db: db_dependency, citas_request: CitaRequest):
+async def create_citas(usuario: user_dependecy, db: db_dependency, citas_request: CitaRequest):
+
+    if usuario is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Autenticacion Fallida')
 
     citas_model = Citas(**citas_request.model_dump())
 
@@ -32,7 +39,11 @@ async def create_citas(db: db_dependency, citas_request: CitaRequest):
 
 
 @router.put('/citas/{cita_id}', status_code=status.HTTP_204_NO_CONTENT)
-async def update_cita(db: db_dependency, cita_request: CitaRequest, cita_id: int = Path(gt=0)):
+async def update_cita(usuario: user_dependecy, db: db_dependency, cita_request: CitaRequest, cita_id: int = Path(gt=0)):
+    
+    if usuario is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Autenticacion Fallida')
+    
     cita_model = db.query(Citas).filter(Citas.id == cita_id).first()
 
     if cita_model is None:
@@ -47,6 +58,10 @@ async def update_cita(db: db_dependency, cita_request: CitaRequest, cita_id: int
 
 
 @router.delete('/citas/{cita_id}', status_code=status.HTTP_204_NO_CONTENT)
-async def delete_cita(db: db_dependency, cita_id: int = Path(gt=0)):
+async def delete_cita(usuario: user_dependecy, db: db_dependency, cita_id: int = Path(gt=0)):
+    
+    if usuario is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Autenticacion Fallida')
+
     db.query(Citas).filter(Citas.id == cita_id).delete()
     db.commit()
