@@ -33,9 +33,9 @@ def authenticate_user(usuario: str, contrasena: str, db):
     return usuario
 
 
-def create_access_token(usuario: str, usuario_id: int, expires_delta: timedelta):
+def create_access_token(usuario: str, id_usuario: int, expires_delta: timedelta):
 
-    encode = {'sub': usuario, 'id': usuario_id}
+    encode = {'sub': usuario, 'id': id_usuario}
     expires = datetime.utcnow() + expires_delta
     encode.update({'exp': expires})
 
@@ -69,3 +69,6 @@ async def login_for_access_token(form_data: form_data_dependency, db: db_depende
     token = create_access_token(usuario.usuario, usuario.id, timedelta(minutes=20))
 
     return {'access_token': token, 'token_type': 'bearer'}
+
+
+user_dependecy = Annotated[dict, Depends(get_current_user)]

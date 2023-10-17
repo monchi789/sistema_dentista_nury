@@ -3,6 +3,7 @@ from config.database import db_dependency
 from schemas.cita_sin_tratamiento import CitaSinTratamientoRequest
 from models.cita_sin_tratamiento import CitasSinTratamiento
 from datetime import datetime
+from routes.token import user_dependecy
 
 
 router = APIRouter(
@@ -11,19 +12,28 @@ router = APIRouter(
 
 
 @router.get('/citas_sin_tratamiento', status_code=status.HTTP_200_OK)
-async def get_all_citas_sin_tratamiento(db: db_dependency):
+async def get_all_citas_sin_tratamiento(usuario: user_dependecy, db: db_dependency):
     
+    if usuario is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Autenticacion Fallida')
+
     return db.query(CitasSinTratamiento).all()
 
 
 @router.get('/citas_sin_tratamiento/{cita_sin_tratamiento_id}', status_code=status.HTTP_200_OK)
-async def get_cita_sin_tratamiento_by_id(db: db_dependency, cita_sin_tratamiento_id: int = Path(gt=0)):
-    
+async def get_cita_sin_tratamiento_by_id(usuario: user_dependecy, db: db_dependency, cita_sin_tratamiento_id: int = Path(gt=0)):
+
+    if usuario is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Autenticacion Fallida')
+
     return db.query(CitasSinTratamiento).filter(CitasSinTratamiento.id == cita_sin_tratamiento_id).first()
 
 @router.post('/citas_sin_tratamiento', status_code=status.HTTP_201_CREATED)
-async def crete_cita_sin_tratamiento(db: db_dependency, cita_sin_tratamiento_request: CitaSinTratamientoRequest):
+async def crete_cita_sin_tratamiento(usuario: user_dependecy, db: db_dependency, cita_sin_tratamiento_request: CitaSinTratamientoRequest):
     
+    if usuario is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Autenticacion Fallida')
+
     cita_sin_tratamiento_model = CitasSinTratamiento(**cita_sin_tratamiento_request.model_dump())
 
     db.add(cita_sin_tratamiento_model)
@@ -31,7 +41,11 @@ async def crete_cita_sin_tratamiento(db: db_dependency, cita_sin_tratamiento_req
 
 
 @router.put('/citas_sin_tratamiento/{cita_sin_tratamiento_id}', status_code=status.HTTP_204_NO_CONTENT)
-async def update_cita_sin_tratamiento(db: db_dependency, cita_sin_tratamiento_resquest: CitaSinTratamientoRequest, cita_sin_tratamiento_id: int = Path(gt=0)):
+async def update_cita_sin_tratamiento(usuario: user_dependecy, db: db_dependency, cita_sin_tratamiento_resquest: CitaSinTratamientoRequest, 
+                                      cita_sin_tratamiento_id: int = Path(gt=0)):
+
+    if usuario is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Autenticacion Fallida')
 
     cita_sin_tratamiento_model = db.query(CitasSinTratamiento).filter(CitasSinTratamiento.id == cita_sin_tratamiento_id).first()
 
@@ -48,7 +62,10 @@ async def update_cita_sin_tratamiento(db: db_dependency, cita_sin_tratamiento_re
 
 
 @router.delete('/citas_sin_tratamiento/{citas_sin_tratamiento_id}', status_code=status.HTTP_204_NO_CONTENT)
-async def delete_usuario(db: db_dependency, citas_sin_tratamiento_id: int = Path(gt=0)):
+async def delete_usuario(usuario: user_dependecy, db: db_dependency, citas_sin_tratamiento_id: int = Path(gt=0)):
+
+    if usuario is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Autenticacion Fallida')
 
     db.query(CitasSinTratamiento).filter(CitasSinTratamiento.id == citas_sin_tratamiento_id).delete()
     db.commit()
