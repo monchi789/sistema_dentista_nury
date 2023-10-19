@@ -33,9 +33,9 @@ def authenticate_user(usuario: str, contrasena: str, db):
     return usuario
 
 
-def create_access_token(usuario: str, id_usuario: int, expires_delta: timedelta):
+def create_access_token(rol: str, usuario: str, id_usuario: int, expires_delta: timedelta):
 
-    encode = {'sub': usuario, 'id': id_usuario}
+    encode = {'sub': usuario, 'id': id_usuario, 'rol': rol}
     expires = datetime.utcnow() + expires_delta
     encode.update({'exp': expires})
 
@@ -47,12 +47,13 @@ def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=ALGORITHM)
         usuario: str = payload.get('sub')
+        rol: str = payload.get('rol')
         usuario_id: int = payload.get('id')
 
         if usuario is None or usuario_id is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Usuaro no valido')
         
-        return {'username': usuario, 'id': usuario_id}
+        return {'usuario': usuario, 'id': usuario_id, 'rol': rol}
     
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Usuario no valido')
@@ -66,7 +67,7 @@ async def login_for_access_token(form_data: form_data_dependency, db: db_depende
     if not usuario:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZE, detail='Usuario no valido')
     
-    token = create_access_token(usuario.usuario, usuario.id, timedelta(minutes=20))
+    token = create_access_token(usuario.rol, usuario.usuario, usuario.id, timedelta(minutes=20))
 
     return {'access_token': token, 'token_type': 'bearer'}
 
