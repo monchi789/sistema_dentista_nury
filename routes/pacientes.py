@@ -12,12 +12,12 @@ router = APIRouter(
 
 @router.get('/pacientes', status_code=status.HTTP_200_OK)
 async def get_all_pacientes(usuario: user_dependecy, db: db_dependency):
-
     return db.query(Pacientes).filter(Pacientes.id_usuario == usuario.get('id')).all()
 
 
 @router.get('/pacientes/{paciente_id}', status_code=status.HTTP_200_OK)
 async def get_all_pacientes_by_id(usuario: user_dependecy, db: db_dependency, paciente_id: int = Path(gt=0)):
+    
     return db.query(Pacientes).filter(Pacientes.id == paciente_id).filter(Pacientes.id_usuario == usuario.get('id')).first()
 
 
