@@ -30,7 +30,7 @@ A continuación, se detallan los pasos para configurar y ejecutar el proyecto en
   
 1. Clona este repositorio en tu maquina local: <br>
 ```bash
-git clone https://github.com/monchi789/crud_dentist.git
+git clone https://github.com/monchi789/sistema_dentista.git
 ```
 
 2. Crea un entorno virtual (recomendado) e instala las dependencias: 
@@ -50,7 +50,7 @@ uvicorn main:app --reload
 
 ## Uso
 A continuación, se detallan algunos ejemplos de cómo utilizar la API:
-- **Endpoint de Users:** Para crear un usuario, realiza una solicitud POST a `/users` con los datos del usuario
+- **Endpoint de Usuarios:** Para crear un usuario, realiza una solicitud POST a `/usuarios` con los datos del usuario
 ```json
 [
     {
@@ -66,4 +66,4 @@ A continuación, se detallan algunos ejemplos de cómo utilizar la API:
     
 ]
 ```
-- **Endpoint de Consulta de Pacientes**: Para obtener información de un usuario, realiza una solicitud GET a `/users/{id}` donde `{id}` es el ID del usuario.
+- **Endpoint de Consulta de Pacientes**: Para obtener información de un usuario, realiza una solicitud GET a `/usuarios/{id}` donde `{id}` es el ID del usuario.
