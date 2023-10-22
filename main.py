@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from models.usuario import Base
 from models.cita import Base
 from models.cita_sin_tratamiento import Base
@@ -10,6 +11,18 @@ from config.database import engine
 from routes import usuario, pacientes, cita_sin_tratamiento, cita, tratamiento, factura, token, admin, contrasena
 
 app = FastAPI()
+
+origins = [
+    "*",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 Base.metadata.create_all(bind=engine)
 
